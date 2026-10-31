@@ -54,7 +54,7 @@ export function initViewer() {
   let modelLoaded = false;
 
   loader.load(
-    "/models/man.glb",
+    `${import.meta.env.BASE_URL}models/man.glb`,
     (gltf) => {
       const model = gltf.scene;
       scene.add(model);
