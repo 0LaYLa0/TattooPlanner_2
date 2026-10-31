@@ -1,0 +1,17 @@
+export const fonts = [
+  { name: "Pacifico", weight: 400, fallback: "cursive" },
+  { name: "Dancing Script", weight: 500, fallback: "cursive" },
+  { name: "Great Vibes", weight: 400, fallback: "cursive" },
+  { name: "Satisfy", weight: 400, fallback: "cursive" },
+  { name: "Sacramento", weight: 400, fallback: "cursive" },
+  { name: "Allura", weight: 400, fallback: "cursive" },
+  { name: "Caveat", weight: 500, fallback: "cursive" },
+  { name: "Permanent Marker", weight: 400, fallback: "cursive" },
+  { name: "Cormorant Garamond", weight: 500, fallback: "serif" },
+  { name: "Playfair Display", weight: 500, fallback: "serif" },
+  { name: "Cinzel", weight: 500, fallback: "serif" },
+  { name: "UnifrakturMaguntia", weight: 400, fallback: "serif" },
+  { name: "Pirata One", weight: 400, fallback: "serif" },
+  { name: "Special Elite", weight: 400, fallback: "monospace" },
+  { name: "Montserrat", weight: 500, fallback: "sans-serif" },
+];

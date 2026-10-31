@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tattoo Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&family=Pacifico&family=Dancing+Script:wght@500&family=Great+Vibes&family=Satisfy&family=Sacramento&family=Allura&family=Caveat:wght@500&family=Playfair+Display:wght@500&family=Cinzel:wght@500&family=Montserrat:wght@500&family=UnifrakturMaguntia&family=Pirata+One&family=Special+Elite&family=Permanent+Marker&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header id="top-menu">
+      <div class="brand">Tattoo <span>Planner</span></div>
+
+      <input
+        id="project-name"
+        type="text"
+        maxlength="60"
+        spellcheck="false"
+        title="Nazwa projektu"
+      />
+
+      <div class="top-actions">
+        <button class="ghost" id="btn-undo" title="Cofnij (Ctrl+Z)">↶</button>
+        <button class="ghost" id="btn-redo" title="Ponów (Ctrl+Y)">↷</button>
+        <button class="ghost" id="btn-save">Zapisz</button>
+
+        <button class="ghost" id="btn-load">Wczytaj</button>
+        <input
+          type="file"
+          id="load-input"
+          accept=".json,application/json"
+          hidden
+        />
+
+        <button class="primary" id="btn-export">Eksportuj obraz</button>
+      </div>
+    </header>
+
+    <aside id="left">
+      <nav id="sidebar">
+        <button class="tab active" data-panel="library">
+          <i>✦</i> <span>Wzory</span>
+        </button>
+
+        <button class="tab" data-panel="text">
+          <i>T</i> <span>Tekst</span>
+        </button>
+
+        <button class="tab" data-panel="upload">
+          <i>⇪</i> <span>Wgraj</span>
+        </button>
+
+        <button class="tab" data-panel="layers">
+          <i>☰</i> <span>Warstwy</span>
+        </button>
+
+        <button class="tab" data-panel="favorites">
+          <i>♡</i> <span>Ulubione</span>
+        </button>
+      </nav>
+
+      <section id="side-panel">
+        <div class="panel active" id="panel-library">
+          <h2>Biblioteka wzorów</h2>
+          <input
+            class="search"
+            id="library-search"
+            type="text"
+            placeholder="Szukaj wzoru…"
+          />
+
+          <div class="chips">
+            <button class="chip active" data-category="all">Wszystkie</button>
+            <button class="chip" data-category="kwiaty">Kwiaty</button>
+            <button class="chip" data-category="geometryczne">
+              Geometryczne
+            </button>
+            <button class="chip" data-category="minimalistyczne">
+              Minimalistyczne
+            </button>
+          </div>
+
+          <div class="grid" id="library-grid"></div>
+        </div>
+
+        <div class="panel" id="panel-text">
+          <h2>Tekst</h2>
+          <textarea id="text-input" placeholder="Wpisz swój napis…"></textarea>
+          <input
+            class="search"
+            id="font-search"
+            type="text"
+            placeholder="Szukaj czcionki…"
+          />
+
+          <div class="font-list" id="font-list"></div>
+
+          <button class="ghost wide" id="fonts-saved-toggle">
+            Pokaż zapisane czcionki ♡
+          </button>
+
+          <button class="primary wide" id="text-add">Dodaj do planera</button>
+        </div>
+
+        <div class="panel" id="panel-upload">
+          <h2>Wgraj własne zdjęcie</h2>
+
+          <label class="dropzone" id="dropzone">
+            Przeciągnij plik tutaj <br />
+            <small>lub kliknij, aby wybrać</small>
+            <input type="file" id="upload-input" accept="image/*" hidden />
+          </label>
+
+          <div id="upload-editor" hidden>
+            <div class="preview">
+              <canvas id="upload-canvas"></canvas>
+            </div>
+
+            <label class="range-label">
+              Usuń jasne tło <em id="threshold-val"></em>
+              <input
+                type="range"
+                id="upload-threshold"
+                min="0"
+                max="256"
+                value="200"
+              />
+            </label>
+
+            <p class="muted hint">
+              Przesuń na 256, żeby wyłączyć. Resztę poprawiaj narzędziami niżej.
+            </p>
+
+            <div class="tool-row" id="upload-tools">
+              <button class="ghost active" data-tool="wand">Różdżka</button>
+              <button class="ghost" data-tool="erase">Gumka</button>
+              <button class="ghost" data-tool="restore">Przywróć</button>
+            </div>
+
+            <label class="range-label" id="tolerance-row">
+              Tolerancja różdżki <em id="tolerance-val"></em>
+              <input
+                type="range"
+                id="upload-tolerance"
+                min="0"
+                max="100"
+                value="30"
+              />
+            </label>
+
+            <label class="range-label" id="brush-row" hidden>
+              Rozmiar pędzla <em id="brush-val"></em>
+              <input
+                type="range"
+                id="upload-brush"
+                min="3"
+                max="40"
+                value="14"
+              />
+            </label>
+
+            <div class="tool-row">
+              <button class="ghost" id="upload-undo" disabled>↶ Cofnij</button>
+              <button class="ghost" id="upload-clear-edits">
+                Wyczyść poprawki
+              </button>
+            </div>
+
+            <button class="primary wide" id="upload-add">
+              Dodaj do planera
+            </button>
+
+            <button class="ghost wide" id="upload-reset">
+              Wybierz inny plik
+            </button>
+          </div>
+        </div>
+
+        <div class="panel" id="panel-layers">
+          <h2>Warstwy</h2>
+          <div id="layers-list"></div>
+        </div>
+
+        <div class="panel" id="panel-favorites">
+          <h2>Ulubione</h2>
+          <p class="muted">Tu pojawią się zapisane wzory i czcionki.</p>
+        </div>
+      </section>
+    </aside>
+
+    <main id="viewer-container">
+      <div class="view-buttons">
+        <button class="ghost" data-view="arm">Ręka</button>
+        <button class="ghost" data-view="back">Plecy</button>
+        <button class="ghost" data-view="leg">Noga</button>
+        <button class="ghost" data-view="reset">Reset</button>
+      </div>
+    </main>
+
+    <aside id="edit-panel">
+      <h2>Edycja tatuażu</h2>
+      <p class="muted" id="edit-empty">
+        Zaznacz tatuaż w warstwach albo dodaj wzór z biblioteki.
+      </p>
+
+      <div id="edit-controls" hidden>
+        <input class="search" id="edit-name" type="text" />
+
+        <label>
+          Rozmiar <em id="scale-val"></em>
+          <input type="range" id="edit-scale" min="2" max="40" step="1" />
+        </label>
+
+        <label>
+          Obrót <em id="rotation-val"></em>
+          <input type="range" id="edit-rotation" min="0" max="360" step="1" />
+        </label>
+
+        <label>
+          Przezroczystość <em id="opacity-val"></em>
+          <input type="range" id="edit-opacity" min="10" max="100" step="1" />
+        </label>
+
+        <div class="edit-actions">
+          <button class="ghost" id="btn-mirror">Odbij</button>
+          <button class="ghost" id="btn-duplicate">Duplikuj</button>
+          <button class="ghost" id="btn-lock">Zablokuj</button>
+          <button class="danger" id="btn-delete">Usuń</button>
+        </div>
+      </div>
+    </aside>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
